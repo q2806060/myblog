@@ -17,10 +17,15 @@ from django.contrib import admin
 from django.urls import path
 from django.views.generic.base import TemplateView
 from django.conf.urls import include, url
+from rest_framework.schemas import get_schema_view
+
 
 urlpatterns = [
     url(r'admin/', admin.site.urls),
     url(r'^user/', include('user.urls')),
+    url(r'^main/', include('blogmain.urls')),
+    url(r'^timeaxis', TemplateView.as_view(template_name='index.html')),
+    url(r'^docs$', get_schema_view()),
     url(r'', TemplateView.as_view(template_name='index.html')),
     
 ]

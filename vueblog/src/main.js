@@ -5,12 +5,16 @@ import App from './App'
 import router from './router'
 import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
+import 'element-ui/lib/theme-chalk/display.css'
 import axios from '@/http'
 import Header from '@/components/common/Header'
 import Footer from '@/components/common/Footer'
+import VueResource from 'vue-resource'
+
 
 // 加载相关组件
 Vue.use(ElementUI)
+Vue.use(VueResource)
 
 Vue.config.productionTip = false
 

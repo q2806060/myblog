@@ -4,6 +4,7 @@ from user import views
 from django.conf.urls import url
 
 urlpatterns = [
-    url(r'^user/login/$', views.login_view),
-    url(r'^get_data/$', views.get_data),
+    url(r'^login$', views.Users.login_view),
+    url(r'^register$', views.Users.register_view),
+    url(r'^logout$', views.Users.logout_view)
 ]

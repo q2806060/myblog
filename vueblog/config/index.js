@@ -11,7 +11,13 @@ module.exports = {
     assetsSubDirectory: 'static',
     assetsPublicPath: '/',
     proxyTable: {
-      '/server/': 'http://localhost:8000/',
+      '/apis': {
+        target: 'http://127.0.0.1:8000/',   //设置你调用的接口域名和端口号 别忘了加http，就是后台服务地址
+        changeOrigin: true,
+        pathRewrite: {
+          '^/apis': ''
+        }
+      }
     },
 
     // Various Dev Server settings

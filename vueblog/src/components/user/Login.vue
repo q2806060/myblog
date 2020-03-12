@@ -6,11 +6,42 @@
             <hr>
             <div class="loginForm">
                 <span><strong>Login：</strong></span>
-                <el-input v-model="loginname" placeholder="Loginname" class="logininput" clearable></el-input>
-                <el-input v-model="loginpwd" type="password" placeholder="Password" class="logininput" show-password></el-input>
-                <el-button class="loginbutton" type="text" @click="goRegister">Register</el-button>
-                <el-button class="loginbutton" type="primary" style="float:right;margin-right:20px;" @click="goLogin">Login</el-button>
-                <el-input type="hidden" id="csrfmiddlewaretoken" name="csrfmiddlewaretoken" value="csrf_token"></el-input>
+                <el-form ref="FormData" :model="FormData">
+                    <el-form-item 
+                        class="logininput"
+                        prop="loginname"
+                        :rules="{ required: true, message: 'Please input loginname', trigger: 'blur'}">
+                        <el-input 
+                            v-model="FormData.loginname" 
+                            placeholder="Loginname" 
+                            clearable
+                            autocomplete="off">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item 
+                        class="logininput"
+                        prop="loginpwd"
+                        :rules="{ required: true, message: 'Please input password', trigger: 'blur'}">
+                        <el-input 
+                            v-model="FormData.loginpwd" 
+                            type="password" 
+                            placeholder="Password"  
+                            show-password
+                            autocomplete="off">
+                        </el-input>
+                    </el-form-item>
+                    <el-form-item>
+                        <el-button 
+                            class="loginbutton" 
+                            type="text" 
+                            @click="goRegister">Register</el-button>
+                        <el-button 
+                            class="loginbutton" 
+                            type="primary" 
+                            style="float:right;margin-right:20px;" 
+                            @click="goLogin('FormData')">Login</el-button>
+                    </el-form-item>
+                </el-form>
             </div>
         </el-card>
     </div>
@@ -23,30 +54,42 @@ export default {
             note:{
                 backgroundImage: "url(" + require("../../assets/zd01.jpg") + ")",
             },
-            loginname:'',
-            loginpwd:'',
-            csrf_token:'',
+            FormData:{
+                loginname:'',
+                loginpwd:'',
+            },
+
         }
     },
     methods: {
         goRegister(){
             this.$router.push({path:'/user/register'})
         },
-        goLogin(){
-            let that = this;
-            let url = DocConfig.server + "/get_data";
-            let params = new URLSearchParams();
-            params.append("content", that.loginname);
-            params.append("csrfmiddlewaretoken", that.csrf_token);
-            that.axios.get(url)
-                .then(function(response){
-                    console.log(response.Data)
-                })
-            // that.axios.post(url, params)
-            //     .then(function(response){
-            //         console.log(response);
-            //     })
-        }
+        goLogin(FormName){
+            this.$refs[FormName].validate((valid) => {
+                if(valid){
+                    let that = this;
+                    let url = DocConfig.server + "/user/login";
+                    let params = new URLSearchParams();
+                    params.append("loginname", that.FormData.loginname);
+                    params.append("password", that.FormData.loginpwd);
+                    that.axios.post(url, params)
+                        .then(function(response){
+
+                            if(response.data.error_code == 0){
+                                that.$router.push({path:"/"})
+                            }else{
+                                alert(response.data.data.error_msg)
+                            }
+                        }).catch((error) => {
+                            alert(error)
+                        })
+                }else{
+                    alert("error login")
+                }
+            })
+            
+        },
 
     }
 }

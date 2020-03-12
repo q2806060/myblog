@@ -17,5 +17,7 @@ body{
 }
 #app{
   font: 14px/1.5 "Microsoft Yahei", 微软雅黑, Tahoma, Arial, Helvetica, STHeiti;
+  width: 60%;
+  margin: 0 auto;
 }
 </style>
